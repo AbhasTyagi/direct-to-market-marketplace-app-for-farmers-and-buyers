@@ -1,0 +1,85 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-04T17:33:13.079Z",
+  "summary": "Diff adds a Motoko backend with profiles/listings/orders/messages types and many frontend pages/hooks for II login, onboarding, marketplace browsing, listing CRUD UI, order placement, sales/purchases, and an order message thread. However, several BuildRequest acceptance criteria are either contradicted by shown backend access rules or not evidenced in the diff (notably public farmer profiles, order cancellation + Cancelled status, structured backend errors, and upgrade persistence).",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Public profile view is available for farmers from listings (shows display name, location, bio).",
+      "reason": "Backend `getUserProfile` explicitly forbids viewing other users' profiles unless admin; frontend attempts to fetch farmer profile from listing, which would trap under this access rule.",
+      "evidence": [
+        "backend/main.mo (getUserProfile: traps unless caller==user or admin)",
+        "frontend/src/pages/ListingDetailPage.tsx (useGetUserProfile(listing?.farmer.toString()))",
+        "frontend/src/hooks/useQueries.ts (actor.getUserProfile(Principal.fromText(principal)))"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Buyer can cancel a Pending request; Purchases statuses include Pending, Accepted, Declined, Cancelled; status changes persisted.",
+      "reason": "Backend `OrderRequest.status` variant shown only includes `#pending`, `#accepted`, `#declined` (no `#cancelled`). No cancel operation is evidenced in frontend hooks/pages shown.",
+      "evidence": [
+        "backend/main.mo (OrderRequest.status : { #pending; #accepted; #declined })",
+        "frontend/src/pages/PurchasesPage.tsx (status mapping only for pending/accepted/declined)"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Backend rejects invalid inputs and returns structured errors that the frontend displays.",
+      "reason": "Backend validation shown uses `Runtime.trap(\"...\")` with plain text strings rather than a structured error type/variant; no structured error handling is evidenced.",
+      "evidence": [
+        "backend/main.mo (createListing: Runtime.trap(\"Missing or invalid required fields\"))",
+        "backend/main.mo (saveCallerUserProfile: Runtime.trap(\"Unauthorized: ...\"))"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Data remains available after canister upgrades/restarts within the template’s standard persistence approach.",
+      "reason": "Diff shows in-memory `var` counters and `Map.empty(...)` collections, but no evidence of stable storage (`stable var`) and/or `preupgrade`/`postupgrade` logic in the visible portion. With truncated backend, persistence may exist later, but it is not evidenced in the provided diff summary.",
+      "evidence": [
+        "backend/main.mo (var nextListingId/nextOrderId; Map.empty for storage; no persistence logic shown in visible content)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin-secret based access-control initialization via URL parameter `caffeineAdminToken` and backend `_initializeAccessControlWithSecret` call.",
+      "reason": "BuildRequest does not mention admin roles/tokens or secret URL parameters; this is additional auth/authorization behavior beyond Internet Identity session awareness.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts (getSecretParameter('caffeineAdminToken'); actor._initializeAccessControlWithSecret(adminToken))",
+        "backend/main.mo (imports AccessControl + MixinAuthorization; includes authorization mixin)"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AppLayout.tsx",
+    "frontend/src/components/OrderMessagesThread.tsx",
+    "frontend/src/components/OrderRequestForm.tsx",
+    "frontend/src/components/ProfileOnboardingDialog.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/pages/ListingDetailPage.tsx",
+    "frontend/src/pages/ListingFormPage.tsx",
+    "frontend/src/pages/MarketplacePage.tsx",
+    "frontend/src/pages/MyListingsPage.tsx",
+    "frontend/src/pages/OrderDetailPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/pages/PurchasesPage.tsx",
+    "frontend/src/pages/SalesPage.tsx",
+    "frontend/src/utils/format.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

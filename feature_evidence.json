@@ -1,0 +1,218 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-authentication-and-session-aware-ui-so-users-can-sign-in-out-and-the-app-can-associate-all-actions-profiles-listings-orders-with-the-signed-in-principal",
+      "featureTitle": "Implement Internet Identity authentication and session-aware UI so users can sign in/out and the app can associate all actions (profiles, listings, orders) with the signed-in principal.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/main.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-user-profile-onboarding-and-management-with-two-roles-farmer-and-buyer-profiles-must-include-display-name-role-location-free-text-phone-email-optional-free-text-and-a-short-bio-description",
+      "featureTitle": "Create user profile onboarding and management with two roles: Farmer and Buyer. Profiles must include: display name, role, location (free-text), phone/email (optional free-text), and a short bio/description.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ProfileOnboardingDialog.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-product-listings-that-farmers-can-create-edit-publish-unpublish-and-delete-listing-fields-title-product-category-unit-e-g-kg-crate-bunch-available-quantity-price-per-unit-harvest-availability-date-optional-location-free-text-and-description",
+      "featureTitle": "Implement product listings that farmers can create, edit, publish/unpublish, and delete. Listing fields: title, product category, unit (e.g., kg, crate, bunch), available quantity, price per unit, harvest/availability date (optional), location (free-text), and description.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/ListingDetailPage.tsx",
+        "frontend/src/pages/ListingFormPage.tsx",
+        "frontend/src/pages/MyListingsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-marketplace-browsing-with-search-and-filters-for-buyers-keyword-search-title-description-category-filter-location-keyword-filter-and-sort-by-newest-and-price-low-to-high-high-to-low",
+      "featureTitle": "Add marketplace browsing with search and filters for buyers: keyword search (title/description), category filter, location keyword filter, and sort by newest and price (low-to-high / high-to-low).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/MarketplacePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-an-order-request-flow-buyers-can-place-an-order-request-against-a-listing-specifying-requested-quantity-proposed-pickup-delivery-note-free-text-and-optional-message-farmers-can-accept-or-decline-both-sides-can-track-status",
+      "featureTitle": "Implement an order/request flow: buyers can place an order request against a listing specifying requested quantity, proposed pickup/delivery note (free-text), and optional message. Farmers can accept or decline. Both sides can track status.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/OrderRequestForm.tsx",
+        "frontend/src/pages/OrderDetailPage.tsx",
+        "frontend/src/pages/PurchasesPage.tsx",
+        "frontend/src/pages/SalesPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-simple-asynchronous-inquiry-comments-thread-per-order-request-not-real-time-buyer-and-farmer-can-post-messages-on-the-order-detail-page-shown-in-chronological-order-with-author-and-timestamp",
+      "featureTitle": "Add a simple asynchronous inquiry/comments thread per order request (not real-time): buyer and farmer can post messages on the order detail page, shown in chronological order with author and timestamp.",
+      "files": [
+        "frontend/src/components/OrderMessagesThread.tsx",
+        "frontend/src/pages/OrderDetailPage.tsx",
+        "frontend/src/utils/format.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-core-navigation-and-pages-marketplace-listing-detail-create-edit-listing-farmer-only-my-listings-farmer-only-sales-farmer-only-purchases-buyer-only-profile-and-a-lightweight-landing-page-explaining-the-app",
+      "featureTitle": "Provide core navigation and pages: Marketplace, Listing Detail, Create/Edit Listing (farmer-only), My Listings (farmer-only), Sales (farmer-only), Purchases (buyer-only), Profile, and a lightweight landing page explaining the app.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/pages/LandingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-design-direction-apply-a-consistent-agriculture-inspired-visual-theme-avoid-blue-purple-using-earthy-greens-warm-neutrals-and-clear-typography-include-a-cohesive-layout-system-header-content-width-cards-forms-across-all-pages",
+      "featureTitle": "Design direction: apply a consistent, agriculture-inspired visual theme (avoid blue/purple) using earthy greens, warm neutrals, and clear typography; include a cohesive layout system (header, content width, cards, forms) across all pages.",
+      "files": [
+        "frontend/index.css",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-basic-data-validation-and-error-handling-across-forms-profile-listing-order-request-required-fields-numeric-validation-for-quantity-price-and-user-friendly-error-messages-in-english",
+      "featureTitle": "Add basic data validation and error handling across forms (profile, listing, order request): required fields, numeric validation for quantity/price, and user-friendly error messages in English.",
+      "files": [
+        "frontend/src/components/OrderRequestForm.tsx",
+        "frontend/src/pages/ListingFormPage.tsx",
+        "frontend/src/pages/MarketplacePage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/PurchasesPage.tsx",
+        "frontend/src/pages/SalesPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-and-include-required-static-images-under-frontend-public-assets-generated-and-render-them-in-the-ui-landing-page-and-header-branding-without-routing-images-through-the-backend",
+      "featureTitle": "Generate and include required static images under frontend/public/assets/generated and render them in the UI (landing page and header branding) without routing images through the backend.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/pages/LandingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

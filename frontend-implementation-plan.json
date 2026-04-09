@@ -1,0 +1,375 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Farm-to-market marketplace (farmers & buyers) — frontend plan",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Internet Identity authentication with session-aware UI and identity-gated actions.",
+      "acceptanceCriteria": [
+        "User can sign in and sign out using Internet Identity",
+        "When signed out, primary actions that require identity (create listing, place order) prompt sign-in",
+        "Backend stores and returns data scoped to the caller principal where applicable (e.g., 'my listings', 'my orders')"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure global styles are imported correctly and keep the InternetIdentityProvider + QueryClientProvider wiring intact for session-aware UI."
+        },
+        {
+          "path": "frontend/src/components/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create a login/logout button using the selected authorization component guidance (Internet Identity via useInternetIdentity) and clear React Query cache on logout. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useSession.ts",
+          "operation": "create",
+          "description": "Add a small session hook that exposes isAuthenticated, principal (string), and a clearSession() helper that clears cached app state on logout (e.g., via React Query). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/RequireAuth.tsx",
+          "operation": "create",
+          "description": "Add an auth gate wrapper that prompts the user to sign in when accessing identity-required pages/actions; integrate with the LoginButton flow. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the app shell and route structure that is aware of authentication state, including guarded routes for identity-required pages and a consistent layout that surfaces sign-in/out."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Profile onboarding and management with Farmer/Buyer roles and farmer public profile view from listings.",
+      "acceptanceCriteria": [
+        "On first sign-in, user is prompted to create a profile and select role (Farmer or Buyer)",
+        "User can view and edit their profile later",
+        "Public profile view is available for farmers from listings (shows display name, location, bio)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Implement profile fetch/save hooks using backend capabilities getCallerUserProfile/saveCallerUserProfile with React Query; avoid onboarding modal flash per selected authorization guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProfileOnboardingDialog.tsx",
+          "operation": "create",
+          "description": "Create a first-login onboarding dialog that collects display name, role (Farmer/Buyer), location, optional contact, and bio; only show when authenticated and profile is missing. Use shadcn-ui dialog/form primitives from immutable UI components by composing them externally. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Create a Profile page to view/edit the current user's profile fields and persist updates via the profile hook."
+        },
+        {
+          "path": "frontend/src/components/FarmerPublicProfileCard.tsx",
+          "operation": "create",
+          "description": "Create a compact public farmer profile card (display name, location, bio) that loads farmer profile via backend getUserProfile and is used from listing detail. Use shadcn-ui Card components by composing them outside immutable paths. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Profile route and ensure onboarding dialog is mounted at a high level after login (without flashing) and is accessible from navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Farmer listing management (create/edit/publish/unpublish/delete) and buyer browsing visibility limited to published listings.",
+      "acceptanceCriteria": [
+        "Farmer can create a listing and see it in 'My Listings'",
+        "Farmer can edit and unpublish/publish a listing",
+        "Buyer can browse published listings in a marketplace view",
+        "Unpublished listings are not visible to other users"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useListings.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listing CRUD and retrieval using backend capabilities (createListing/updateListing/deleteListing/publishListing/unpublishListing/getListingById/getListingsByFarmer/getAllListings)."
+        },
+        {
+          "path": "frontend/src/pages/MyListingsPage.tsx",
+          "operation": "create",
+          "description": "Create farmer-only 'My Listings' page showing the signed-in farmer’s listings with actions to edit, publish/unpublish, and delete; hide from buyers via role gating."
+        },
+        {
+          "path": "frontend/src/pages/ListingFormPage.tsx",
+          "operation": "create",
+          "description": "Create a farmer-only Create/Edit Listing page with fields (title, category, unit, quantity, price, optional harvest date, location, description) and submit to backend via hooks; include publish/unpublish controls where appropriate."
+        },
+        {
+          "path": "frontend/src/pages/ListingDetailPage.tsx",
+          "operation": "create",
+          "description": "Create Listing Detail page that displays listing fields, publication state for owner, and (for buyers) the order request entry point; integrate farmer public profile card for the listing’s farmer."
+        },
+        {
+          "path": "frontend/src/components/RequireRole.tsx",
+          "operation": "create",
+          "description": "Add a role gate wrapper that reads the user’s app role (Farmer/Buyer) from the saved profile and conditionally allows access to farmer-only pages/actions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register routes for My Listings, Create Listing, Edit Listing, and Listing Detail; ensure navigation reaches these pages without manual URL entry."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Marketplace browsing with search, filters (category/location), and deterministic sort with incremental loading.",
+      "acceptanceCriteria": [
+        "Marketplace page lists published listings with pagination or incremental loading",
+        "Search and filters update results without requiring a full page reload",
+        "Sort options change ordering deterministically"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/MarketplacePage.tsx",
+          "operation": "create",
+          "description": "Create Marketplace page that lists published listings with keyword search, category filter, location keyword filter, and sort (newest, price low-to-high, price high-to-low); implement incremental loading (e.g., 'Load more')."
+        },
+        {
+          "path": "frontend/src/components/MarketplaceFilters.tsx",
+          "operation": "create",
+          "description": "Create a filters/search bar component for Marketplace that updates results client-side without full reload; compose shadcn-ui inputs/selects externally. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useMarketplaceListings.ts",
+          "operation": "create",
+          "description": "Implement a hook that fetches listings and applies filtering/sorting deterministically (preferably client-side over a single fetch) while ensuring only published listings are shown to non-owners."
+        },
+        {
+          "path": "frontend/src/components/ListingCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable listing card for marketplace grids/lists with consistent styling and navigation to listing detail; compose shadcn-ui Card/Badge externally. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Marketplace route into navigation as a primary destination and ensure deep links to listing detail remain functional."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Order request flow: buyers place requests; farmers accept/decline; buyer can cancel pending; both track status on dedicated pages.",
+      "acceptanceCriteria": [
+        "Buyer can place an order request from a listing detail page",
+        "Farmer can view incoming order requests on a 'Sales' page and accept/decline each request",
+        "Buyer can view placed requests on a 'Purchases' page with statuses: Pending, Accepted, Declined, Cancelled",
+        "Buyer can cancel a Pending request",
+        "Order status changes are persisted and reflected after refresh"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useOrders.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for order lifecycle and lists using backend capabilities (placeOrderRequest/getBuyerOrderRequests/getFarmerOrderRequests/acceptOrderRequest/declineOrderRequest) and provide helpers to map/display statuses, including buyer cancellation if supported by backend behavior."
+        },
+        {
+          "path": "frontend/src/components/OrderRequestForm.tsx",
+          "operation": "create",
+          "description": "Create an order request form (quantity, pickup/delivery note, optional message) for buyers on the listing detail page with validation and friendly error handling; compose shadcn-ui form primitives externally. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SalesPage.tsx",
+          "operation": "create",
+          "description": "Create farmer-only 'Sales' page listing incoming order requests with actions to accept/decline; include loading/empty states and navigate to order detail."
+        },
+        {
+          "path": "frontend/src/pages/PurchasesPage.tsx",
+          "operation": "create",
+          "description": "Create buyer-only 'Purchases' page listing placed requests with statuses and a cancel action for Pending requests (wired to the backend capability/behavior that implements cancellation); include loading/empty states and navigate to order detail."
+        },
+        {
+          "path": "frontend/src/pages/OrderDetailPage.tsx",
+          "operation": "create",
+          "description": "Create Order Detail page showing order metadata, status, participant actions (accept/decline for farmer, cancel for buyer when pending), and link back to listing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register Sales, Purchases, and Order Detail routes and ensure role-based navigation exposes only relevant pages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Asynchronous per-order message thread with author/timestamp, chronological display, and participant-only access.",
+      "acceptanceCriteria": [
+        "Both participants (buyer and the listing’s farmer) can add messages to an order thread",
+        "Messages are persisted and load on page refresh",
+        "Users cannot read or write messages for orders they are not a participant of"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useOrderMessages.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for loading and posting order messages via backend capabilities getOrderMessages/addOrderMessage; handle authorization failures gracefully and show user-friendly errors."
+        },
+        {
+          "path": "frontend/src/components/OrderMessagesThread.tsx",
+          "operation": "create",
+          "description": "Create a message thread component for Order Detail page that renders messages chronologically with author and timestamp, and allows posting new messages; compose shadcn-ui textarea/button externally. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/utils/format.ts",
+          "operation": "create",
+          "description": "Add formatting utilities for timestamps and for comparing principals (string comparison) to label messages as 'You' vs other participant, without displaying raw principal IDs."
+        },
+        {
+          "path": "frontend/src/pages/OrderDetailPage.tsx",
+          "operation": "modify",
+          "description": "Embed the OrderMessagesThread and ensure the UI only attempts to load/post messages when the user is authenticated; display backend authorization errors as access denied."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Core navigation and pages with role-based visibility and refresh-safe routing.",
+      "acceptanceCriteria": [
+        "Role-based navigation hides farmer-only pages from buyers and vice versa",
+        "Users can reach all pages via navigation without manual URL entry",
+        "Routing works on refresh (no broken deep links)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create a cohesive layout with header navigation (Marketplace, Profile, role-specific links), content container width, and sign-in/out control; integrate role gating to hide irrelevant pages."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "create",
+          "description": "Create a lightweight landing page explaining the app and directing users to sign in and browse marketplace."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Implement refresh-safe routing (prefer hash-based routing for static hosting) and register routes for: Landing, Marketplace, Listing Detail, Create/Edit Listing, My Listings, Sales, Purchases, Profile, and a Not Found fallback. Ensure all pages are reachable via navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Agriculture-inspired theme (earthy greens, warm neutrals) and consistent layout/cards/forms across pages (avoid blue/purple primary branding).",
+      "acceptanceCriteria": [
+        "All pages share consistent spacing, typography, and component styling",
+        "Primary/secondary buttons and form inputs have consistent visual states (hover/focus/disabled)",
+        "Theme colors are applied consistently and do not use blue/purple as primary branding colors"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.css",
+          "operation": "modify",
+          "description": "Update global CSS variables/tokens to an agriculture-inspired palette (earthy greens + warm neutrals) and ensure typography/spacing defaults are consistent across the app while avoiding blue/purple as primary branding colors."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust/extend Tailwind theme tokens as needed to support consistent layout (container, card shadows, focus rings) aligned with the updated CSS variables."
+        },
+        {
+          "path": "frontend/src/components/ui/AppPrimitives.tsx",
+          "operation": "create",
+          "description": "Create small wrapper components (e.g., PageHeader, Section, EmptyState, LoadingState) that compose existing shadcn-ui components for consistent cards/forms/layout without editing immutable UI paths. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Apply the cohesive layout system (header, content width, cards/forms spacing) across routed pages via the shared layout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Frontend form validation, structured error display, and loading/empty states for lists.",
+      "acceptanceCriteria": [
+        "Invalid submissions are blocked with clear inline error messages",
+        "Backend rejects invalid inputs and returns structured errors that the frontend displays",
+        "Loading and empty states are present for marketplace and order lists"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/validation.ts",
+          "operation": "create",
+          "description": "Add reusable validation helpers for required fields and numeric validation (quantity/price) and return English error messages for inline display."
+        },
+        {
+          "path": "frontend/src/utils/errors.ts",
+          "operation": "create",
+          "description": "Add a helper to normalize backend errors (including authorization traps) into user-friendly English messages and optionally field-level errors where applicable."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Add inline validation and friendly error handling for profile updates; show loading and disabled states during saves."
+        },
+        {
+          "path": "frontend/src/pages/ListingFormPage.tsx",
+          "operation": "modify",
+          "description": "Add inline validation for listing create/edit (required fields, numeric validation) and show user-friendly errors returned from backend."
+        },
+        {
+          "path": "frontend/src/components/OrderRequestForm.tsx",
+          "operation": "modify",
+          "description": "Add inline validation for order request submissions and ensure backend errors are displayed without crashing the page."
+        },
+        {
+          "path": "frontend/src/pages/MarketplacePage.tsx",
+          "operation": "modify",
+          "description": "Ensure marketplace has explicit loading, empty, and error states, and that filter changes do not force full page reload."
+        },
+        {
+          "path": "frontend/src/pages/SalesPage.tsx",
+          "operation": "modify",
+          "description": "Add loading/empty states and error handling for the farmer order request list and actions."
+        },
+        {
+          "path": "frontend/src/pages/PurchasesPage.tsx",
+          "operation": "modify",
+          "description": "Add loading/empty states and error handling for the buyer order request list and actions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Add required generated static images and render them in landing and header branding (no backend image serving).",
+      "acceptanceCriteria": [
+        "Generated images exist at the specified paths under frontend/public/assets/generated",
+        "Landing page and header display the generated assets correctly in the built app",
+        "No backend endpoints are used for serving these images"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/farm-market-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated app logo mark asset at the exact required path for static serving (no backend involvement)."
+        },
+        {
+          "path": "frontend/public/assets/generated/farm-market-hero.dim_1600x900.png",
+          "operation": "create",
+          "description": "Add the generated landing hero illustration asset at the exact required path for static serving (no backend involvement)."
+        },
+        {
+          "path": "frontend/public/assets/generated/category-icons-sprite.dim_1024x1024.png",
+          "operation": "create",
+          "description": "Add the generated category icon sprite asset at the exact required path for static serving (no backend involvement)."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Render the header branding using the static asset at frontend/public/assets/generated/farm-market-logo.dim_512x512.png and ensure it displays correctly across routes."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Render the landing hero image using frontend/public/assets/generated/farm-market-hero.dim_1600x900.png and optionally reference frontend/public/assets/generated/category-icons-sprite.dim_1024x1024.png for category highlights."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build an app that enables farmers to access markets directly (direct-to-market platform).",
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-authentication-and-session-aware-ui-so-users-can-sign-in-out-and-the-app-can-associate-all-actions-profiles-listings-orders-with-the-signed-in-principal",
+      "title": "Implement Internet Identity authentication and session-aware UI so users can sign in/out and the app can associate all actions (profiles, listings, orders) with the signed-in principal.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-user-profile-onboarding-and-management-with-two-roles-farmer-and-buyer-profiles-must-include-display-name-role-location-free-text-phone-email-optional-free-text-and-a-short-bio-description",
+      "title": "Create user profile onboarding and management with two roles: Farmer and Buyer. Profiles must include: display name, role, location (free-text), phone/email (optional free-text), and a short bio/description.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-product-listings-that-farmers-can-create-edit-publish-unpublish-and-delete-listing-fields-title-product-category-unit-e-g-kg-crate-bunch-available-quantity-price-per-unit-harvest-availability-date-optional-location-free-text-and-description",
+      "title": "Implement product listings that farmers can create, edit, publish/unpublish, and delete. Listing fields: title, product category, unit (e.g., kg, crate, bunch), available quantity, price per unit, harvest/availability date (optional), location (free-text), and description.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-marketplace-browsing-with-search-and-filters-for-buyers-keyword-search-title-description-category-filter-location-keyword-filter-and-sort-by-newest-and-price-low-to-high-high-to-low",
+      "title": "Add marketplace browsing with search and filters for buyers: keyword search (title/description), category filter, location keyword filter, and sort by newest and price (low-to-high / high-to-low).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-order-request-flow-buyers-can-place-an-order-request-against-a-listing-specifying-requested-quantity-proposed-pickup-delivery-note-free-text-and-optional-message-farmers-can-accept-or-decline-both-sides-can-track-status",
+      "title": "Implement an order/request flow: buyers can place an order request against a listing specifying requested quantity, proposed pickup/delivery note (free-text), and optional message. Farmers can accept or decline. Both sides can track status.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-simple-asynchronous-inquiry-comments-thread-per-order-request-not-real-time-buyer-and-farmer-can-post-messages-on-the-order-detail-page-shown-in-chronological-order-with-author-and-timestamp",
+      "title": "Add a simple asynchronous inquiry/comments thread per order request (not real-time): buyer and farmer can post messages on the order detail page, shown in chronological order with author and timestamp.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-core-navigation-and-pages-marketplace-listing-detail-create-edit-listing-farmer-only-my-listings-farmer-only-sales-farmer-only-purchases-buyer-only-profile-and-a-lightweight-landing-page-explaining-the-app",
+      "title": "Provide core navigation and pages: Marketplace, Listing Detail, Create/Edit Listing (farmer-only), My Listings (farmer-only), Sales (farmer-only), Purchases (buyer-only), Profile, and a lightweight landing page explaining the app.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-direction-apply-a-consistent-agriculture-inspired-visual-theme-avoid-blue-purple-using-earthy-greens-warm-neutrals-and-clear-typography-include-a-cohesive-layout-system-header-content-width-cards-forms-across-all-pages",
+      "title": "Design direction: apply a consistent, agriculture-inspired visual theme (avoid blue/purple) using earthy greens, warm neutrals, and clear typography; include a cohesive layout system (header, content width, cards, forms) across all pages.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-data-validation-and-error-handling-across-forms-profile-listing-order-request-required-fields-numeric-validation-for-quantity-price-and-user-friendly-error-messages-in-english",
+      "title": "Add basic data validation and error handling across forms (profile, listing, order request): required fields, numeric validation for quantity/price, and user-friendly error messages in English.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-and-include-required-static-images-under-frontend-public-assets-generated-and-render-them-in-the-ui-landing-page-and-header-branding-without-routing-images-through-the-backend",
+      "title": "Generate and include required static images under frontend/public/assets/generated and render them in the UI (landing page and header branding) without routing images through the backend.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a direct-to-market app for farmers to access and sell to buyers without intermediaries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Persist all core entities in the Motoko backend (profiles, listings, orders, order messages) and expose a minimal candid API to support the UI flows, including role- and ownership-based access control for writes and sensitive reads.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    }
+  ],
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App logo mark: simple sprout + market stall icon, flat vector style, earthy green and warm neutral palette (farm-market-logo.dim_512x512.png)\n- Landing hero illustration: farmer holding produce facing a buyer across a small market table, minimal flat illustration, warm tones, plenty of whitespace (farm-market-hero.dim_1600x900.png)\n- Category icon set: 6 flat icons (vegetables, fruits, grains, dairy, livestock, herbs), consistent stroke/shape style (category-icons-sprite.dim_1024x1024.png)",
+  "generatedImages": [
+    {
+      "filename": "farm-market-logo.dim_512x512.png",
+      "description": "App logo mark: simple sprout + market stall icon, flat vector style, earthy green and warm neutral palette",
+      "targetWidth": 512,
+      "targetHeight": 512
+    },
+    {
+      "filename": "farm-market-hero.dim_1600x900.png",
+      "description": "Landing hero illustration: farmer holding produce facing a buyer across a small market table, minimal flat illustration, warm tones, plenty of whitespace",
+      "targetWidth": 1600,
+      "targetHeight": 900
+    },
+    {
+      "filename": "category-icons-sprite.dim_1024x1024.png",
+      "description": "Category icon set: 6 flat icons (vegetables, fruits, grains, dairy, livestock, herbs), consistent stroke/shape style",
+      "targetWidth": 1024,
+      "targetHeight": 1024
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Direct-to-market marketplace app for farmers and buyers",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

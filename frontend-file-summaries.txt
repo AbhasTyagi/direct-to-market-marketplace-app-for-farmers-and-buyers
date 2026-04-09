@@ -1,0 +1,22 @@
+{
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup, hash-based routing for all pages (landing, marketplace, listings, orders, profile), and theme provider integration.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including profile management, listing CRUD, order lifecycle, and messaging with proper cache invalidation.",
+  "frontend/src/components/AppLayout.tsx": "Application layout with responsive header navigation, role-based menu visibility, authentication controls, and footer with branding.",
+  "frontend/src/components/ProfileOnboardingDialog.tsx": "First-login profile creation dialog that collects user information and role selection (Farmer/Buyer) with proper loading state handling to prevent flash.",
+  "frontend/src/pages/LandingPage.tsx": "Landing page with hero section, feature cards highlighting platform benefits, and call-to-action sections for marketplace and account creation.",
+  "frontend/src/pages/MarketplacePage.tsx": "Marketplace browsing page with search, category/location filters, sorting options, incremental loading, and listing cards with published-only visibility for non-owners.",
+  "frontend/src/pages/ListingDetailPage.tsx": "Detailed listing view with product information, farmer profile card, and order request form for buyers (hidden for listing owners).",
+  "frontend/src/components/OrderRequestForm.tsx": "Form component for buyers to place order requests with quantity validation, pickup/delivery details, and optional message to farmer.",
+  "frontend/src/pages/MyListingsPage.tsx": "Farmer-only page displaying owned listings with actions to edit, publish/unpublish, delete, and create new listings.",
+  "frontend/src/pages/ListingFormPage.tsx": "Create and edit listing form with validation for all required fields (title, category, unit, quantity, price, location, description) and optional harvest date.",
+  "frontend/src/pages/SalesPage.tsx": "Farmer-only page showing incoming order requests with accept/decline actions for pending orders and view details for completed orders.",
+  "frontend/src/pages/PurchasesPage.tsx": "Buyer-only page displaying placed order requests with status badges and navigation to order detail with messaging.",
+  "frontend/src/pages/OrderDetailPage.tsx": "Order detail page showing order information, status, and embedded message thread for buyer-farmer communication.",
+  "frontend/src/components/OrderMessagesThread.tsx": "Real-time message thread component with chronological display, author identification, and send functionality with polling for updates.",
+  "frontend/src/pages/ProfilePage.tsx": "User profile management page for viewing and editing display name, location, contact, and bio with role badge display.",
+  "frontend/src/utils/format.ts": "Utility functions for formatting timestamps into human-readable relative time strings (e.g., \"2h ago\", \"3d ago\").",
+  "frontend/index.css": "Global styles with agriculture-inspired OKLCH color system featuring earthy greens, warm terracotta tones, and natural palette for both light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended theme tokens for agriculture aesthetic, custom shadows, Inter font family, and consistent design system.",
+  "frontend/src/main.tsx": "Application entry point that sets up React root with QueryClient and InternetIdentityProvider wrappers, importing global styles from the correct relative path.",
+  "frontend/src/index.css": "Global styles with agriculture-inspired OKLCH color system featuring earthy greens, warm terracotta tones, and natural palette for both light and dark modes."
+}
